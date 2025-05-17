@@ -33,6 +33,7 @@ def calculate_stats(data_ms):
     lower_bound = q1 - 1.5 * iqr
     upper_bound = q3 + 1.5 * iqr
     stats['outliers'] = [round(x, 5) for x in data_ms if x < lower_bound or x > upper_bound]
+    stats['outlier_count'] = len(stats['outliers'])
 
     # Plot the data
     data = np.array(data_ms)
@@ -83,14 +84,15 @@ def calculate_stats(data_ms):
     return stats
 
 def print_stats(stats):
-    print(f"Count     : {stats['count']}")
-    print(f"Mean      : {stats['mean']} ms")
-    print(f"Median    : {stats['median']} ms")
-    print(f"Stdev     : {stats['stdev']} ms")
-    print(f"Min       : {stats['min']} ms")
-    print(f"Max       : {stats['max']} ms")
-    print(f"Outliers  : {stats['outliers']} ms")
-    print(f"Timeouts   : {stats['count_above_3000']}")
+    print(f"Count          : {stats['count']}")
+    print(f"Mean           : {stats['mean']} ms")
+    print(f"Median         : {stats['median']} ms")
+    print(f"Stdev          : {stats['stdev']} ms")
+    print(f"Min            : {stats['min']} ms")
+    print(f"Max            : {stats['max']} ms")
+    print(f"Outliers       : {stats['outliers']} ms")
+    print(f"Outlier count  : {stats['outlier_count']}")
+    print(f"Timeouts       : {stats['count_above_3000']}")
 
 def main():
     try:
