@@ -1,5 +1,7 @@
 import statistics
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 NANO_TO_MILLI = 1_000_000.0
 
@@ -31,6 +33,52 @@ def calculate_stats(data_ms):
     lower_bound = q1 - 1.5 * iqr
     upper_bound = q3 + 1.5 * iqr
     stats['outliers'] = [round(x, 5) for x in data_ms if x < lower_bound or x > upper_bound]
+
+    # Plot the data
+    data = np.array(data_ms)
+    plt.hist(data, bins=50, color='skyblue', edgecolor='black')
+    plt.title('Data Distribution (Histogram)')
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Frequency')
+    plt.savefig('data_distribution_histogram.png')
+    plt.close()
+
+    # Plot the data with seaborn
+    sns.kdeplot(data, shade=True)
+    plt.title('Data Distribution (KDE)')
+    plt.xlabel('Time (ms)')
+    plt.savefig('data_distribution_kde.png') 
+    plt.close()  
+
+    # Box plot
+    plt.boxplot(data, vert=False)
+    plt.title('Data Distribution (Boxplot)')
+    plt.xlabel('Time (ms)')
+    plt.savefig('boxplot.png') 
+    plt.close()
+
+    # Combined plot
+    fig, (ax_box, ax_hist) = plt.subplots(2, sharex=True,
+                                      gridspec_kw={"height_ratios": (.15, .85)})
+
+    sns.boxplot(data, ax=ax_box, orient='h')
+    sns.histplot(data, bins=50, ax=ax_hist, color='skyblue')
+
+    ax_box.set(xlabel='')
+    plt.boxplot(data, vert=False)
+    plt.title('Data Distribution (Boxplot)')
+    plt.xlabel('Time (ms)')
+    plt.savefig('combined.png') 
+    plt.close()
+    
+    # log scale
+    plt.hist(data, bins=50, color='skyblue', edgecolor='black')
+    plt.xscale('log')
+    plt.title('Data Distribution (Histogram, Log Scale)')
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Frequency')
+    plt.savefig('log_scale.png') 
+    plt.close()
     
     return stats
 
